@@ -1,11 +1,11 @@
 module github.com/guessi/ec2-filter
 
-go 1.17
+go 1.18
 
 require (
 	github.com/aws/aws-sdk-go-v2 v1.16.2
 	github.com/aws/aws-sdk-go-v2/config v1.15.3
-	github.com/aws/aws-sdk-go-v2/service/ec2 v1.33.0
+	github.com/aws/aws-sdk-go-v2/service/ec2 v1.35.1
 	github.com/urfave/cli/v2 v2.4.0
 )
 
