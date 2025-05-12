@@ -93,5 +93,5 @@ func buildOutput(result *ec2.DescribeInstancesOutput) {
 			)
 		}
 	}
-	fmt.Printf(b.String())
+	fmt.Printf("%s", b.String())
 }
