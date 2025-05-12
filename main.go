@@ -1,51 +1,51 @@
 package main
 
 import (
+	"context"
 	"log"
 	"os"
 
-	"github.com/urfave/cli/v2"
+	"github.com/urfave/cli/v3"
 )
 
 func main() {
-	app := cli.NewApp()
-	app.Usage = "filter ec2 instances with tag"
+	app := &cli.Command{
+		Name:  "boom",
+		Usage: "filter ec2 instances with tag",
+		Flags: []cli.Flag{
+			&cli.StringFlag{
+				Name:     "region",
+				Aliases:  []string{"r"},
+				Value:    "us-east-1",
+				Required: false,
+			},
+			&cli.StringFlag{
+				Name:     "key",
+				Aliases:  []string{"k"},
+				Value:    "",
+				Required: false,
+			},
+			&cli.StringFlag{
+				Name:     "value",
+				Aliases:  []string{"v"},
+				Value:    "",
+				Required: false,
+			},
+		},
+		Action: func(ctx context.Context, c *cli.Command) error {
+			r := c.String("region")
+			k := c.String("key")
+			v := c.String("value")
 
-	app.Flags = []cli.Flag{
-		&cli.StringFlag{
-			Name:     "region",
-			Aliases:  []string{"r"},
-			Value:    "us-east-1",
-			Required: false,
-		},
-		&cli.StringFlag{
-			Name:     "key",
-			Aliases:  []string{"k"},
-			Value:    "",
-			Required: false,
-		},
-		&cli.StringFlag{
-			Name:     "value",
-			Aliases:  []string{"v"},
-			Value:    "",
-			Required: false,
+			if instances := describeInstances(r, k, v); instances != nil {
+				buildOutput(instances)
+			}
+
+			return nil
+
 		},
 	}
-
-	app.Action = func(c *cli.Context) error {
-		r := c.String("region")
-		k := c.String("key")
-		v := c.String("value")
-
-		if instances := describeInstances(r, k, v); instances != nil {
-			buildOutput(instances)
-		}
-
-		return nil
-	}
-
-	err := app.Run(os.Args)
-	if err != nil {
+	if err := app.Run(context.Background(), os.Args); err != nil {
 		log.Fatal(err)
 	}
 }
