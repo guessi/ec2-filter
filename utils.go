@@ -11,6 +11,8 @@ import (
 	"github.com/aws/aws-sdk-go-v2/config"
 	"github.com/aws/aws-sdk-go-v2/service/ec2"
 	"github.com/aws/aws-sdk-go-v2/service/ec2/types"
+	"golang.org/x/text/cases"
+	"golang.org/x/text/language"
 )
 
 func getDescribeInstancesInput(key, value string) *ec2.DescribeInstancesInput {
@@ -84,7 +86,7 @@ func buildOutput(result *ec2.DescribeInstancesOutput) {
 
 			fmt.Fprintf(&b, fields,
 				instanceName,
-				strings.Title(fmt.Sprintf("%s", instance.State.Name)),
+				fmt.Sprintf("%s", cases.Title(language.English).String(string(instance.State.Name))),
 				instance.InstanceType,
 				privateIpAddress,
 				*instance.InstanceId,

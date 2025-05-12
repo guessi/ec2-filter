@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"os"
 
@@ -38,6 +39,10 @@ func main() {
 			v := c.String("value")
 
 			if instances := describeInstances(r, k, v); instances != nil {
+				if len(instances.Reservations) == 0 {
+					fmt.Println("No instances found")
+					return nil
+				}
 				buildOutput(instances)
 			}
 
